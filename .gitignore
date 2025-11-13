@@ -102,6 +102,7 @@ $RECYCLE.BIN/
 *.dotCover
 _ReSharper*/
 *.DotSettings.user
+*.csproj.DotSettings
 
 ## Entity Framework
 Migrations/obj/
