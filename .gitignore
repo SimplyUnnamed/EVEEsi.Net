@@ -1,0 +1,118 @@
+﻿## Build output
+bin/
+obj/
+out/
+artifacts/
+*.dll
+*.exe
+*.app
+*.log
+*.pdb
+*.cache
+*.mdb
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.userprefs
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+
+# Auto-generated files
+*.aps
+*.ncb
+*.opendb
+*.cachefile
+*.VC.db
+
+# VS Test files
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# NuGet
+# (allow packages/ if you commit using restore-on-build)
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Rider / IntelliJ
+.idea/
+*.iml
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+## ASP.NET / IIS
+*.vspscc
+*.vssscc
+_global.asax
+App_Data/
+*.db
+*.mdf
+*.ldf
+
+## Publish output
+wwwroot/dist/
+publish/
+*.publishsettings
+
+## Logs
+*.log
+logs/
+log/
+
+## Cache / temp
+*.tmp
+*.temp
+*.tmp.*
+temp/
+tmp/
+
+## OS-specific
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+**/.DS_Store
+
+# Linux
+*~
+.cache/
+
+## Rider Plugin temp
+.idea/.idea_modules/
+
+## JetBrains DotCover / Resharper
+*.dotCover
+_ReSharper*/
+*.DotSettings.user
+
+## Entity Framework
+Migrations/obj/
+
+## Secrets / Sensitive files
+appsettings.Development.json
+secrets.json
+*.key
+*.pem
+
+## Optional: ignore solution-specific configs
+# comment these out if you *want* to commit them
+*.csproj.user
+*.sln.ide
