@@ -20,7 +20,7 @@ public class ScopeAccessMiddleware(ITokenClaimsParser claimsParser) : IEsiMiddle
 	public Task HandleAsync(EsiRequestContext context, EsiRequestDelegate next,
 		CancellationToken cancellationToken = default)
 	{
-		if (!context.Endpoint.ProtectedEndpoint)
+		if (context.Endpoint.AuthenticatedEndpoint is null)
 		{
 			return next(context);
 		}
@@ -28,7 +28,7 @@ public class ScopeAccessMiddleware(ITokenClaimsParser claimsParser) : IEsiMiddle
 		EsiEndpoint endpoint = context.Endpoint;
 		string? token = context.Request.Token;
 
-		if (string.IsNullOrWhiteSpace(endpoint.Scope))
+		if (string.IsNullOrWhiteSpace(endpoint.AuthenticatedEndpoint.Scope))
 		{
 			throw new InvalidOperationException("Protected endpoint must specify a scope");
 		}
@@ -39,9 +39,9 @@ public class ScopeAccessMiddleware(ITokenClaimsParser claimsParser) : IEsiMiddle
 			return Task.CompletedTask;
 		}
 
-		if (!TokenHasScope(token, endpoint.Scope))
+		if (!TokenHasScope(token, endpoint.AuthenticatedEndpoint.Scope))
 		{
-			ProduceFailureResponse(context, $"Provided access token does not have required scope '{endpoint.Scope}'");
+			ProduceFailureResponse(context, $"Provided access token does not have required scope '{endpoint.AuthenticatedEndpoint.Scope}'");
 			return Task.CompletedTask;
 		}
 

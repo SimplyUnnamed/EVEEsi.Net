@@ -1,4 +1,5 @@
-﻿using EveEsi.Net.Enums.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+using EveEsi.Net.Enums.Client;
 
 namespace EveEsi.Net.Config;
 
@@ -17,12 +18,14 @@ public class EsiEndpointBuilder
 
 	public string EndpointId { get; set; }
 	public HttpMethodType HttpMethodType { get; set; }
-	public bool AuthenticatedEndpoint { get; set; }
-	public string? Scope { get; set; }
+	public AuthenticatedEndpoint? AuthenticatedEndpoint { get; set; } 
+	
+	[MemberNotNullWhen(true, nameof(AuthenticatedEndpoint))]
+	public bool IsAuthenticatedEndpoint => AuthenticatedEndpoint != null;
+	// public string? Scope { get; set; }
 	public string Route { get; set; } = null!;
 
-	public TimeSpan? TimedCacheExpiry { get; set; }
-	public TimeOnly? DailyCacheExpiry { get; set; }
+	public CacheExpiry? CacheExpiry { get; set; }
 
 	public ESI.Endpoints.RateLimitGroup? RateLimitGroup { get; set; }
 
@@ -30,15 +33,11 @@ public class EsiEndpointBuilder
 	{
 		Validate();
 
-		return new EsiEndpoint(EndpointId, AuthenticatedEndpoint, HttpMethodType, Route, Scope, RateLimitGroup);
+		return new EsiEndpoint(EndpointId,  Route, HttpMethodType, AuthenticatedEndpoint, CacheExpiry, RateLimitGroup);
 	}
 
 	private void Validate()
 	{
-		if (AuthenticatedEndpoint && (string.IsNullOrEmpty(Scope) || !ESI.EsiScopes.Contains(Scope)))
-		{
-			throw new InvalidOperationException("An authenticated endpoint cannot be created without a valid scope");
-		}
 
 		if (Route is null)
 		{

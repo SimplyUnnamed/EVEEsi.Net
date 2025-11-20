@@ -57,7 +57,7 @@ public class EsiRequest : HttpRequestMessage
 
 	private void SetupAuthorizationHeader(EsiEndpoint endpoint)
 	{
-		if (!endpoint.ProtectedEndpoint)
+		if (!endpoint.IsAuthenticated)
 		{
 			return;
 		}

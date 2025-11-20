@@ -47,7 +47,7 @@ internal abstract class EsiRequestBaseClient<TResponse> : IEsiRequestClient<TRes
 /// <summary>
 ///     A Request client which does not expect a response body
 /// </summary>
-internal class EsiRequestClient : EsiRequestBaseClient<EsiResponse>, IRequestClient
+internal sealed class EsiRequestClient : EsiRequestBaseClient<EsiResponse>, IRequestClient
 {
 	public EsiRequestClient(IEsiHttpClient client, IMiddlewareCollection middlewareCollection, EsiRequest request,
 		string endpointId) : base(client, middlewareCollection, request, endpointId)
@@ -71,7 +71,7 @@ internal class EsiRequestClient : EsiRequestBaseClient<EsiResponse>, IRequestCli
 ///     An ESI Request Client which expects a model in its response body
 /// </summary>
 /// <typeparam name="TModel">The Expected model to be returned from the ESI request</typeparam>
-internal class EsiRequestClient<TModel> : EsiRequestBaseClient<EsiResponse<TModel>>, IRequestClient<TModel>
+internal sealed class EsiRequestClient<TModel> : EsiRequestBaseClient<EsiResponse<TModel>>, IRequestClient<TModel>
 {
 	public EsiRequestClient(IEsiHttpClient client, IMiddlewareCollection middleware, EsiRequest esiRequest,
 		string endpointId) : base(client, middleware, esiRequest, endpointId)

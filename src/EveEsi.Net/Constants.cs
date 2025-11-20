@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Threading.Tasks.Dataflow;
 using EveEsi.Net.Config;
 using EveEsi.Net.Enums.Client;
 
@@ -55,33 +56,29 @@ public class ESI
 			{
 				Endpoints.Alliances.PublicInformation, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route = $"/alliances/[{Parameters.Route.AllianceId}]";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Alliances.CorporationsInAlliance, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route = $"/alliances/[{Parameters.Route.AllianceId}]/corporations";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Alliances.ActiveAlliances, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route = $"/alliances/[{Parameters.Route.AllianceId}]/corporations";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Alliances.AllianceIcon, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.DailyCacheExpiry = new TimeOnly(11, 5);
 					b.Route = $"/alliances/[{Parameters.Route.AllianceId}]/icons";
+					b.CacheExpiry = new DailyExpiry(new TimeOnly(11, 5));
 				}
 			},
 
@@ -94,57 +91,49 @@ public class ESI
 			{
 				Endpoints.Assets.CharacterAssetList, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/assets";
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-assets.read_assets.v1";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-assets.read_assets.v1");
 				}
 			},
 			{
 				Endpoints.Assets.CharacterAssetNames, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Post;
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/assets/names";
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-assets.read_assets.v1";
+					b.HttpMethodType = HttpMethodType.Post;
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-assets.read_assets.v1");
 				}
 			},
 			{
 				Endpoints.Assets.CharacterAssetLocations, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Post;
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/assets/locations";
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-assets.read_assets.v1";
+					b.HttpMethodType = HttpMethodType.Post;
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-assets.read_assets.v1");
 				}
 			},
 			{
 				Endpoints.Assets.CorporationAssetList, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
 					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/assets";
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-assets.read_corporation_assets.v1";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-assets.read_corporation_assets.v1");
 				}
 			},
 			{
 				Endpoints.Assets.CorporationAssetNames, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Post;
 					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/assets/names";
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-assets.read_corporation_assets.v1";
+					b.HttpMethodType = HttpMethodType.Post;
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-assets.read_corporation_assets.v1");
 				}
 			},
 			{
 				Endpoints.Assets.CorporationAssetLocations, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Post;
 					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/assets/locations";
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-assets.read_corporation_assets.v1";
+					b.HttpMethodType = HttpMethodType.Post;
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-assets.read_corporation_assets.v1");
 				}
 			},
 
@@ -157,41 +146,34 @@ public class ESI
 			{
 				Endpoints.Calendar.CalendarItems, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-calendar.read_calendar.v1";
 					b.Route = $"/calendars/[{Parameters.Route.CharacterId}]/calendar";
-					b.TimedCacheExpiry = TimeSpan.FromSeconds(5);
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-calendar.read_calendar.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromSeconds(5));
 				}
 			},
 			{
 				Endpoints.Calendar.CalendarEvent, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-calendar.read_calendar.v1";
 					b.Route = $"/calendars/[{Parameters.Route.CharacterId}]/calendar/[{Parameters.Route.EventId}]";
-					b.TimedCacheExpiry = TimeSpan.FromSeconds(5);
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-calendar.read_calendar.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromSeconds(5));
 				}
 			},
 			{
 				Endpoints.Calendar.RespondToEvent, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Put;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-calendar.respond_calendar_events.v1";
 					b.Route = $"/calendars/[{Parameters.Route.CharacterId}]/calendar/[{Parameters.Route.EventId}]";
+					b.HttpMethodType = HttpMethodType.Put;
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-calendar.respond_calendar_events.v1");
 				}
 			},
 			{
 				Endpoints.Calendar.EventAttendees, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-calendar.read_calendar.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(10);
 					b.Route =
 						$"/calendars/[{Parameters.Route.CharacterId}]/calendar/[{Parameters.Route.EventId}]/attendees";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-calendar.read_calendar.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(10));
 				}
 			},
 
@@ -204,134 +186,112 @@ public class ESI
 			{
 				Endpoints.Characters.Affilation, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Post;
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route = "/characters/affiliation";
+					b.HttpMethodType = HttpMethodType.Post;
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Characters.PublicInformation, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromDays(30);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromDays(30));
 				}
 			},
 			{
 				Endpoints.Characters.AgentsResearch, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/agents_research";
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_agents_research.v1";
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_agents_research.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Characters.Blueprints, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_blueprints.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/blueprints";
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_blueprints.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Characters.CorporationHistory, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/corporationhistory";
-					b.TimedCacheExpiry = TimeSpan.FromDays(1);
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromDays(1));
 				}
 			},
 			{
 				Endpoints.Characters.CSPA, b =>
 				{
 					b.HttpMethodType = HttpMethodType.Post;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_contacts.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/cspa";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_contacts.v1");
 				}
 			},
 			{
 				Endpoints.Characters.Fatigue, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_fatigue.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/fatigue";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_fatigue.v1");
+					b.CacheExpiry =  new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 					b.RateLimitGroup = Endpoints.RateLimitGroup.CharLocation;
 				}
 			},
 			{
 				Endpoints.Characters.Medals, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_medals.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/medals";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_medals.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Characters.Notifications, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_notifications.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/notifications";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(10);
+					b.AuthenticatedEndpoint =  new AuthenticatedEndpoint("esi-characters.read_notifications.v1");
+					b.CacheExpiry =  new TimeBasedExpiry(TimeSpan.FromMinutes(10));
 					b.RateLimitGroup = Endpoints.RateLimitGroup.CharLocation;
 				}
 			},
 			{
 				Endpoints.Characters.ContactNotifications, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_notifications.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/notifications/contacts";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(10);
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_notifications.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(10));
 				}
 			},
 			{
 				Endpoints.Characters.Portrait, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.DailyCacheExpiry = new TimeOnly(11, 05);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/portrait";
+					b.CacheExpiry = new DailyExpiry(new TimeOnly(11, 05));
 				}
 			},
 			{
 				Endpoints.Characters.Roles, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_corporation_roles.v1";
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/roles";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_corporation_roles.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Characters.Standings, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_standings.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/standings";
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_standings.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Characters.Titles, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_titles.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/titles";
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_titles.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 
@@ -344,22 +304,18 @@ public class ESI
 			{
 				Endpoints.Clones.CloneList, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_clones.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(2);
-					b.RateLimitGroup = Endpoints.RateLimitGroup.CharLocation;
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/clones";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_clones.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(2));
+					b.RateLimitGroup = Endpoints.RateLimitGroup.CharLocation;
 				}
 			},
 			{
 				Endpoints.Clones.CloneImplants, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_implants.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(2);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/implants";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_implants.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(2));
 				}
 			},
 
@@ -372,80 +328,66 @@ public class ESI
 			{
 				Endpoints.Contacts.AllianceContacts, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-alliances.read_contacts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/alliances/[{Parameters.Route.AllianceId}]/contacts";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-alliances.read_contacts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Contacts.AllianceContactLabels, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-alliances.read_contacts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/alliances/[{Parameters.Route.AllianceId}]/contacts/labels";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-alliances.read_contacts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Contacts.DeleteCharacterContacts, b =>
 				{
 					b.HttpMethodType = HttpMethodType.Delete;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.write_contacts.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/contacts";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.write_contacts.v1");
 				}
 			},
 			{
 				Endpoints.Contacts.CharacterContacts, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_contacts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/contacts";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_contacts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Contacts.AddCharacterContacts, b =>
 				{
 					b.HttpMethodType = HttpMethodType.Post;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.write_contacts.v1";
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/contacts";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.write_contacts.v1");
 				}
 			},
 			{
 				Endpoints.Contacts.CharacterContactLabels, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-characters.read_contacts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/contacts/labels";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_contacts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Contacts.CorporationContacts, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-corporations.read_contacts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/contacts";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-corporations.read_contacts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 					b.RateLimitGroup = Endpoints.RateLimitGroup.CorpSocial;
 				}
 			},
 			{
 				Endpoints.Contacts.CorporationContactLabels, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-corporations.read_contacts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/contacts/labels";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-corporations.read_contacts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 					b.RateLimitGroup = Endpoints.RateLimitGroup.CorpSocial;
 				}
 			},
@@ -459,89 +401,77 @@ public class ESI
 			{
 				Endpoints.Contracts.CharacterContracts, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-contracts.read_character_contracts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/characters/[{Parameters.Route.CharacterId}]/contracts";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-contracts.read_character_contracts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Contracts.CharacterContractBids, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-contracts.read_character_contracts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route =
 						$"/characters/[{Parameters.Route.CharacterId}]/contracts/[{Parameters.Route.ContractId}]/bids";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-contracts.read_character_contracts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Contracts.CharacterContractItems, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.AuthenticatedEndpoint = true;
-					b.Scope = "esi-contracts.read_character_contracts.v1";
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route =
 						$"/characters/[{Parameters.Route.CharacterId}]/contracts/[{Parameters.Route.ContractId}]/items";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-contracts.read_character_contracts.v1");
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			},
 			{
 				Endpoints.Contracts.PublicContracts, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(30);
 					b.Route = $"/contracts/public/[{Parameters.Route.RegionId}]";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(30));
 				}
 			},
 			{
 				Endpoints.Contracts.PublicContractBids, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/contracts/public/bids/[{Parameters.Route.ContractId}]";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Contracts.PublicContractItems, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/contracts/public/items/[{Parameters.Route.ContractId}]";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 				}
 			},
 			{
 				Endpoints.Contracts.CorporationContracts, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/contracts";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 					b.RateLimitGroup = Endpoints.RateLimitGroup.CorpContract;
-					b.Scope = "esi-contracts.read_corporation_contracts.v1";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-contracts.read_corporation_contracts.v1");
 				}
 			},
 			{
 				Endpoints.Contracts.CorporationContractBids, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromMinutes(5);
 					b.Route =
 						$"/corporations/[{Parameters.Route.CorporationId}]/contracts/[{Parameters.Route.ContractId}]/bids";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(5));
 					b.RateLimitGroup = Endpoints.RateLimitGroup.CorpContract;
-					b.Scope = "esi-contracts.read_corporation_contracts.v1";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-contracts.read_corporation_contracts.v1");
 				}
 			},
 			{
 				Endpoints.Contracts.CorporationContractItems, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route =
 						$"/corporations/[{Parameters.Route.CorporationId}]/contracts/[{Parameters.Route.ContractId}]/items";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 					b.RateLimitGroup = Endpoints.RateLimitGroup.CorpContract;
-					b.Scope = "esi-contracts.read_corporation_contracts.v1";
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-contracts.read_corporation_contracts.v1");
 				}
 			},
 
@@ -554,17 +484,63 @@ public class ESI
 			{
 				Endpoints.Corporation.NpcCorporations, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.DailyCacheExpiry = new TimeOnly(11, 05);
 					b.Route = "/corporations/npccorps";
+					b.CacheExpiry = new DailyExpiry(new TimeOnly(11, 05));
 				}
 			},
 			{
 				Endpoints.Corporation.Information, b =>
 				{
-					b.HttpMethodType = HttpMethodType.Get;
-					b.TimedCacheExpiry = TimeSpan.FromHours(1);
 					b.Route = $"'/corporations/[{Parameters.Route.CorporationId}]";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
+				}
+			},
+			{
+				Endpoints.Corporation.AllianceHistory, b =>
+				{
+					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/aliancehistory";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
+				}
+			},
+			{
+				Endpoints.Corporation.Blueprints, b =>
+				{
+					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/blueprints";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
+					b.RateLimitGroup = Endpoints.RateLimitGroup.CorpIndustry;
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-corporations.read_blueprints.v1");
+				}
+			},
+			{
+				Endpoints.Corporation.ContainersLogs, b =>
+				{
+					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/container/logs";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromMinutes(10));
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-corporations.read_container_logs.v1");
+				}
+			},
+			{
+				Endpoints.Corporation.Divisions, b =>
+				{
+					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/divisions";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
+					b.RateLimitGroup = Endpoints.RateLimitGroup.CorpWallet;
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-corporations.read_divisions.v1");
+				}
+			},
+			{
+				Endpoints.Corporation.Facilities, b =>
+				{
+					b.Route = $"/corporations/[{Parameters.Route.CorporationId}]/facilities";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
+					b.AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-corporations.read_facilities.v1");
+				}
+			},
+			{
+				Endpoints.Corporation.Icons, b =>
+				{
+					b.Route = $"/corporations/{Parameters.Route.CorporationId}/icons";
+					b.CacheExpiry = new TimeBasedExpiry(TimeSpan.FromHours(1));
 				}
 			}
 
@@ -653,9 +629,16 @@ public class ESI
 	{
 		public enum RateLimitGroup
 		{
-			[EnumMember(Value = "char-location")] CharLocation,
-			[EnumMember(Value = "corp-social")] CorpSocial,
-			[EnumMember(Value = "corp-contract")] CorpContract
+			[EnumMember(Value = "char-location")] 
+			CharLocation,
+			[EnumMember(Value = "corp-social")] 
+			CorpSocial,
+			[EnumMember(Value = "corp-contract")] 
+			CorpContract,
+			[EnumMember(Value = "corp-industry")] 
+			CorpIndustry,
+			[EnumMember(Value = "corp-wallet")] 
+			CorpWallet,
 		}
 
 		public static class Characters

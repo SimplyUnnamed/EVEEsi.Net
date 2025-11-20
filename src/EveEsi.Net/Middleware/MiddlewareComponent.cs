@@ -5,7 +5,7 @@ namespace EveEsi.Net.Middleware;
 /// <summary>
 ///     Class stores a middleware implementation
 /// </summary>
-internal class MiddlewareComponent
+internal sealed class MiddlewareComponent
 {
 	public MiddlewareComponent(Func<EsiRequestDelegate, EsiRequestDelegate> middleware, int priority)
 	{

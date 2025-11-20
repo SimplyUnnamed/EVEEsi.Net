@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using EveEsi.Net.Config;
 using EveEsi.Net.Enums.Client;
 using EveEsi.Net.EsiClient;
 using EveEsi.Net.Extensions;
@@ -11,7 +12,7 @@ public class FileCacheMiddleware(IEsiCacheService cacheService) : IEsiMiddleware
 	public async Task HandleAsync(EsiRequestContext context, EsiRequestDelegate next,
 		CancellationToken cancellationToken = default)
 	{
-		if (context.Endpoint.MethodType != HttpMethodType.Get)
+		if (context.Endpoint.MethodType != HttpMethodType.Get || context.Endpoint.CacheExpiry == null)
 		{
 			await next(context);
 			return;
@@ -47,7 +48,8 @@ public class FileCacheMiddleware(IEsiCacheService cacheService) : IEsiMiddleware
 			Headers = context.ResponseContext.Response.Headers.ToDictionary(x => x.Key, x => x.Value)
 		};
 
-		await cacheService.StoreValue(keyRoute, cachedItem, context.Endpoint.DefaultCacheExpiration);
+		TimeSpan ttl = context.Endpoint.CacheExpiry.CalculateExpiry();
+		await cacheService.StoreValue(keyRoute, cachedItem, ttl);
 	}
 
 
