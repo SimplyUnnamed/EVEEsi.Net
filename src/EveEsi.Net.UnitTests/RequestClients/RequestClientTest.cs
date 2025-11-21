@@ -36,7 +36,7 @@ internal class RequestClientTest
 
 	private EsiResponseContext BuildResponseContext()
 	{
-		EsiEndpoint testEndpoint = new(_endpoint, false, HttpMethodType.Get, "/unit/test", null, null);
+		EsiEndpoint testEndpoint = new(_endpoint, "/unit/test", HttpMethodType.Get, null, null, null);
 		EsiRequestContext context = new(_endpoint, testEndpoint, _req, _provider);
 		context.ResponseContext.Response = new EsiResponse(new HttpResponseMessage(HttpStatusCode.OK));
 		return context.ResponseContext;

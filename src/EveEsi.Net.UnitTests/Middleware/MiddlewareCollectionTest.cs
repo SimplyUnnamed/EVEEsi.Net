@@ -35,7 +35,7 @@ public class MiddlewareCollectionTest
 
 	private static EsiRequestContext Ctx(IServiceProvider sp)
 	{
-		EsiEndpoint testEndpoint = new("random_endpoint", false, HttpMethodType.Get, "/unit/test", null, null);
+		EsiEndpoint testEndpoint = new("random_endpoint", "/unit/test", HttpMethodType.Get, null,null, null);
 		return new EsiRequestContext("random_endpoint", testEndpoint, new EsiRequest(), sp)
 		{
 			CancellationToken = CancellationToken.None

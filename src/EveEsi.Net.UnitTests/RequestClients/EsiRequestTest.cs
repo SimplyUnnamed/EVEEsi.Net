@@ -107,8 +107,7 @@ public class EsiRequestTest
 		{
 			HttpMethodType = HttpMethodType.Post,
 			Route = "/unit/{testId}/test",
-			AuthenticatedEndpoint = true,
-			Scope = "esi-characters.read_titles.v1"
+			AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_titles.v1")
 		};
 
 		EsiRequest request = new(p =>
@@ -126,8 +125,7 @@ public class EsiRequestTest
 		{
 			HttpMethodType = HttpMethodType.Post,
 			Route = "/unit/{testId}/test",
-			AuthenticatedEndpoint = true,
-			Scope = "esi-characters.read_titles.v1"
+			AuthenticatedEndpoint = new AuthenticatedEndpoint("esi-characters.read_titles.v1")
 		};
 		string token = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()));
 		EsiRequest request = new(p =>

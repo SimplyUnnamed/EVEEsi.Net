@@ -36,7 +36,7 @@ public class EsiRequestClientFactoryTests
 				Arg.Any<CancellationToken>())
 			.Returns(ci =>
 			{
-				EsiEndpoint endpoint = new(ci.Arg<string>(), false, HttpMethodType.Get, "/unit/test", null, null);
+				EsiEndpoint endpoint = new(ci.Arg<string>(), "/unit/test", HttpMethodType.Get, null, null, null);
 				EsiRequestContext requestContext = new(ci.Arg<string>(), endpoint, ci.Arg<EsiRequest>(), _services);
 				requestContext.ResponseContext.Response = new HttpResponseMessage(HttpStatusCode.OK);
 				return requestContext.ResponseContext;
