@@ -38,7 +38,11 @@ public class EsiEndpointBuilder
 
 	private void Validate()
 	{
-
+		if (AuthenticatedEndpoint is not null && !ESI.EsiScopes.Contains(AuthenticatedEndpoint.Scope))
+		{
+			throw new ArgumentException($"{EndpointId} Endpoint has an invalid scope.", nameof(AuthenticatedEndpoint));
+		}
+		
 		if (Route is null)
 		{
 			throw new InvalidOperationException("At least one route must be configured for the esi endpoint.");

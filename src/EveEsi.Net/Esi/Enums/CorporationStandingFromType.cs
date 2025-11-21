@@ -5,10 +5,9 @@ using EveEsi.Net.Utilities;
 namespace EveEsi.Net.Esi.Enums;
 
 [JsonConverter(typeof(JsonStringEnumMemberConverter))]
-public enum ContactType
+public enum CorporationStandingFromType
 {
-	[EnumMember(Value = "character")] Character,
-	[EnumMember(Value = "corporation")] Corporation,
-	[EnumMember(Value = "alliance")] Alliance,
+	[EnumMember(Value = "agent")] Agent,
+	[EnumMember(Value = "npc_corp")] NpcCorp,
 	[EnumMember(Value = "faction")] Faction
 }
